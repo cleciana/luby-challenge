@@ -9,7 +9,7 @@ const authenticate = async (req, res) => {
 		});
 
 		await Token.create({
-			userId: user.id
+			user_id: user.id
 		});
 
 		const token = util.generateToken(user.id);

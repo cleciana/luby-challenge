@@ -3,6 +3,8 @@ const Router = require('express');
 // controllers
 const userController = require('./app/controllers/user.controller');
 const authController = require('./app/controllers/auth.controller');
+const followerController = require('./app/controllers/follower.controller');
+
 // middleware
 const authMiddleware = require('./app/middlewares/auth.middleware');
 const routes = new Router();
@@ -14,12 +16,14 @@ routes.get('/', (req, res) => {
 
 // Login
 routes.post('/login', authController.authenticate);
+routes.post('/user', userController.create);
 routes.use(authMiddleware.login);
 
 // Rotas de usuario
 routes.get('/user',userController.show);
-routes.post('/user', userController.create);
 routes.put('/user', userController.update);
 routes.delete('/user', userController.remove);
+
+routes.post('/user/followers', followerController.follow);
 
 module.exports = routes;
