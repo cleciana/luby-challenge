@@ -26,6 +26,8 @@ routes.delete('/user', userController.remove);
 
 // Rotas de Follower
 routes.post('/user/follow', followerController.follow);
+routes.delete('/user/unfollow', followerController.unfollow);
 routes.get('/user/followers', followerController.list);
+routes.get('/user/follower/details', followerController.show);
 
 module.exports = routes;
