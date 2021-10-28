@@ -4,4 +4,4 @@ npx-sequelize-cli-model:generate-example
 
 .env
 
-./uploads/*
+uploads

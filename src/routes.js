@@ -48,7 +48,6 @@ routes.post('/upload', upload.single('avatar'), (req, res) => {
 		username: req.body.username,
 		avatar_url: req.file.path
 	}
-	console.log(req.file);
 	userController.update(req, res);
 });
 
