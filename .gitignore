@@ -1,3 +1,5 @@
 node_modules
 
 npx-sequelize-cli-model:generate-example
+
+.env

@@ -1,4 +1,4 @@
-const { User, Follower } = require('../models/');
+const { User, Follower, Following } = require('../models/');
 const Util = require('../util/util');
 
 const follow = async (req, res) => {
@@ -9,19 +9,21 @@ const follow = async (req, res) => {
 			where: {username: data.username}
 		});
 
-		const following = await User.findOne({
+		const toFollow = await User.findOne({
 			where: {nome: data.followingName}
 		});
 
 		const follower = await Follower.create({
 			UserId: own.id,
-			followsId: following.id
+			followsId: toFollow.id
 		});
 
-		delete follower.dataValues.UserID;
-		delete follower.dataValues.followsId;
+		const following = await Following.create({
+			UserId: toFollow.id,
+			followerId: own.id
+		});
 
-		return res.status(201).json(follower);
+		return res.status(201).send();
 
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
@@ -32,22 +34,28 @@ const show = async (req, res) => {
 	try {
 		const data = req.body;
 
-		const own = await User.findOne({
+		const me = await User.findOne({
 			where: {username: data.username}
 		});
-
-		const follower = await User.findOne({
+		const {id, nome, email, localizacao, avatar_url, bio} = await User.findOne({
 			where: {nome: data.followerName}
 		});
 
-		const {nome, email, localizacao, avatar_url, bio} = await Follower.findOne({
+		const aux = await Follower.findOne({
 			where: {
-				UserId: own.id,
-				followsId: follower.id
+				UserId: id
 			}
 		});
-		let userProfile = {nome, email, localizacao, avatar_url, bio};
-		res.status(200).json(userProfile);
+
+		const followerCount = await Follower.count({
+			where: {followsId: id}
+		});
+		const followingCount = await Following.count({
+			where: {followerId: id}
+		});
+
+		const userProfile = {nome, email, localizacao, avatar_url, bio, followerCount, followingCount};
+		res.status(200).json({userProfile});
 
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
@@ -65,7 +73,7 @@ const list = async (req, res) => {
 			where: { followsId:id }
 		});
 
-		const followers = await Util.getFollowerProfiles([...found]);
+		const followers = await Util.getFollowerSummary([...found]);
 		
 		return res.status(200).json({followers, count: followers.length});
 
@@ -90,6 +98,13 @@ const unfollow = async (req, res) => {
 			where: {
 				UserId: own.id,
 				followsId: unfollowing.id
+			}
+		});
+
+		await Following.destroy({
+			where: {
+				UserId: unfollowing.id,
+				followerId: own.id
 			}
 		});
 
