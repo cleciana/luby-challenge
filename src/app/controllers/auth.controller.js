@@ -13,7 +13,7 @@ const authenticate = async (req, res) => {
 		});
 
 		const token = util.generateToken(user.id);
-		return res.status(201).json(token);
+		return res.status(201).json({token: token});
 
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});

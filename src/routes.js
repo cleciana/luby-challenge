@@ -3,10 +3,12 @@ const Router = require('express');
 // controllers
 const userController = require('./app/controllers/user.controller');
 const authController = require('./app/controllers/auth.controller');
-const followerController = require('./app/controllers/follower.controller');
+const followController = require('./app/controllers/follow.controller');
+const avatarController = require('./app/controllers/avatar.controller');
 
 // middleware
 const authMiddleware = require('./app/middlewares/auth.middleware');
+
 const routes = new Router();
 
 // Rota raiz
@@ -24,10 +26,13 @@ routes.get('/user',userController.show);
 routes.put('/user', userController.update);
 routes.delete('/user', userController.remove);
 
+// Rota para upload do avatar
+routes.post('/user/:nome/profile-pic', avatarController.save);
+
 // Rotas de Follow
-routes.post('/user/follow', followerController.follow);
-routes.delete('/user/unfollow', followerController.unfollow);
-routes.get('/user/followers', followerController.list);
-routes.get('/user/follower/details', followerController.show);
+routes.post('/user/follow', followController.follow);
+routes.delete('/user/unfollow', followController.unfollow);
+routes.get('/user/followers', followController.list);
+routes.get('/user/follower/details', followController.show);
 
 module.exports = routes;

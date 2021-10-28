@@ -14,7 +14,7 @@ module.exports = {
 					model: 'Users',
 					key: 'id'
 				}
-			},
+			}, 
 			followsId: {
 				allowNull: false,
 				type: Sequelize.INTEGER,

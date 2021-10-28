@@ -9,23 +9,23 @@ const login = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).send({ error: 'O token é obrigatório' });
+      return res.status(401).send({ message: 'O token é obrigatório' });
     }
 
     const parts = authHeader.split(' ');
 
     if (!parts.lenght === 2) {
-      return res.status(401).send({ error: 'token error ' });
+      return res.status(401).send({ message: 'token error ' });
     }
 
     const [scheme, token] = parts;
 
     if (!/^Bearer$/i.test(scheme)) {
-      return res.status(401).send({ error: 'token malformatted' });
+      return res.status(401).send({ message: 'token malformatted' });
     }
 
     if (!token) {
-      return res.status(401).send({ error: 'O token é obrigatório' });
+      return res.status(401).send({ message: 'O token é obrigatório' });
     }
     const decoded = await jwt.verify(token, authConfig.secret);
 
@@ -35,8 +35,8 @@ const login = async (req, res, next) => {
         return next();
       });
     }
-  } catch (error) {
-    return res.status(401).send({ message: `Você não está autorizado a realizar esta ação: ${error.message}` });
+  } catch (message) {
+    return res.status(401).send({ message: `Você não está autorizado a realizar esta ação: ${message.message}` });
   }
 };
 

@@ -21,6 +21,7 @@ const create = async (req, res) => {
 const show = async (req, res) => {
 	try {
 		const username = req.body;
+
 		const user = await User.findOne({
 			where: username
 		});
@@ -29,7 +30,6 @@ const show = async (req, res) => {
 		delete user.dataValues.updatedAt;
 
 		return res.json(user);
-
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}    
@@ -38,6 +38,7 @@ const show = async (req, res) => {
 const update = async (req, res) => {
 	try {
 		const data = req.body;
+
 		const user = await User.findOne({
 			where: {username: data.username}
 		});
@@ -45,9 +46,9 @@ const update = async (req, res) => {
 
 		delete updated.dataValues.createdAt;
 		delete updated.dataValues.updatedAt;
+		delete updated.dataValues.username;
 
 		return res.json(updated);
-
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}    
@@ -56,12 +57,12 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
 	try {
 		const username = req.body;
+
 		await User.destroy({
 			where: username
 		});
 
 		return res.status(200).send({message: 'Conta excluida com sucesso.'});
-
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}    
