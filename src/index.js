@@ -5,6 +5,7 @@ const port = 5000;
 
 const routes = require('./routes');
 
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(routes);
