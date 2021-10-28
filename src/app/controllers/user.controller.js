@@ -29,7 +29,7 @@ const show = async (req, res) => {
 		delete user.dataValues.createdAt;
 		delete user.dataValues.updatedAt;
 
-		return res.json(user);
+		return res.status(200).json(user);
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}    
@@ -48,7 +48,7 @@ const update = async (req, res) => {
 		delete updated.dataValues.updatedAt;
 		delete updated.dataValues.username;
 
-		return res.json(updated);
+		return res.status(200).json(updated);
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}    

@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
 const userController = require('./app/controllers/user.controller');
 const authController = require('./app/controllers/auth.controller');
 const followController = require('./app/controllers/follow.controller');
+const repositoryController = require('./app/controllers/repository.controller');
 
 // middlewares
 const authMiddleware = require('./app/middlewares/auth.middleware');
@@ -24,24 +25,23 @@ const upload = multer({storage, limits: {
 
 const routes = new Router();
 
-// Rota raiz
+// Rotas públicas
 routes.get('/', (req, res) => {
 	res.status(404).send({message: '404: Page not found :/ '});
 });
 
-// Rotas públicas
 routes.post('/login', authController.authenticate);
 routes.post('/cadastro', userController.create);
 
 // Rotas privadas (necessario estar logado)
 routes.use(authMiddleware.login);
 
-// Rotas de usuario
+// User
 routes.get('/user',userController.show);
 routes.put('/user', userController.update);
 routes.delete('/user', userController.remove);
 
-// Rota para upload do avatar
+// Upload do avatar
 routes.post('/upload', upload.single('avatar'), (req, res) => {
 
 	req.body = {
@@ -51,10 +51,16 @@ routes.post('/upload', upload.single('avatar'), (req, res) => {
 	userController.update(req, res);
 });
 
-// Rotas de Follow
+// Follow
 routes.post('/user/follow', followController.follow);
 routes.delete('/user/unfollow', followController.unfollow);
 routes.get('/user/followers', followController.list);
 routes.get('/user/follower/details', followController.show);
+
+// Repository
+routes.post('/user/repos', repositoryController.create);
+routes.get('/user/repos',repositoryController.list);
+routes.put('/user/repos', repositoryController.update);
+routes.delete('/user/repos', repositoryController.remove);
 
 module.exports = routes;
