@@ -37,7 +37,7 @@ const list = async (req, res) => {
 			where: {UserId: user.id}
 		});
 
-		res.status(200).json({data, count});
+		return res.status(200).json({data, count});
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}
@@ -54,7 +54,7 @@ const update = async (req, res) => {
 			const repository = await Repository.findOne({
 				where: {
 					UserId: user.id,
-					nome:data.nome
+					nome: data.nome
 				}
 			});
 	

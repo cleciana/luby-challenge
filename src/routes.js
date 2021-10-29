@@ -15,6 +15,7 @@ const userController = require('./app/controllers/user.controller');
 const authController = require('./app/controllers/auth.controller');
 const followController = require('./app/controllers/follow.controller');
 const repositoryController = require('./app/controllers/repository.controller');
+const starController = require('./app/controllers/star.controller');
 
 // middlewares
 const authMiddleware = require('./app/middlewares/auth.middleware');
@@ -53,7 +54,7 @@ routes.post('/upload', upload.single('avatar'), (req, res) => {
 
 // Follow
 routes.post('/user/follow', followController.follow);
-routes.delete('/user/unfollow', followController.unfollow);
+routes.delete('/user/follow', followController.unfollow);
 routes.get('/user/followers', followController.list);
 routes.get('/user/follower/details', followController.show);
 
@@ -62,5 +63,10 @@ routes.post('/user/repos', repositoryController.create);
 routes.get('/user/repos',repositoryController.list);
 routes.put('/user/repos', repositoryController.update);
 routes.delete('/user/repos', repositoryController.remove);
+
+// Star
+routes.post('/user/repos/star', starController.star); // create
+routes.get('/user/repos/star', starController.list);  // list starred
+routes.delete('/user/repos/star', starController.unstar);  // remove star
 
 module.exports = routes;
