@@ -12,11 +12,11 @@ const follow = async (req, res) => {
 			where: {nome: data.followingName}
 		});
 
-		const follower = await Follower.create({
+		await Follower.create({
 			UserId: me.id,
 			followsId: toFollow.id
 		});
-		const following = await Following.create({
+		await Following.create({
 			UserId: toFollow.id,
 			followerId: me.id
 		});

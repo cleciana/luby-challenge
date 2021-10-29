@@ -65,8 +65,8 @@ routes.put('/user/repos', repositoryController.update);
 routes.delete('/user/repos', repositoryController.remove);
 
 // Star
-routes.post('/user/repos/star', starController.star); // create
-routes.get('/user/repos/star', starController.list);  // list starred
-routes.delete('/user/repos/star', starController.unstar);  // remove star
+routes.post('/user/repos/star', starController.star);
+routes.get('/user/repos/star', starController.list);
+routes.delete('/user/repos/star', starController.unstar);
 
 module.exports = routes;
