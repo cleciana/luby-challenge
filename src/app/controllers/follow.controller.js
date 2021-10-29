@@ -1,4 +1,4 @@
-const { User, Follower, Following } = require('../models');
+const { User, Follower } = require('../models');
 const Util = require('../util/util');
 
 const follow = async (req, res) => {
@@ -15,10 +15,6 @@ const follow = async (req, res) => {
 		await Follower.create({
 			UserId: me.id,
 			followsId: toFollow.id
-		});
-		await Following.create({
-			UserId: toFollow.id,
-			followerId: me.id
 		});
 
 		return res.status(201).json({message: `${me.nome} seguiu ${toFollow.nome}`});
@@ -39,21 +35,21 @@ const show = async (req, res) => {
 		});
 
 		const aux = await Follower.findOne({
-			where: {
-				UserId: id
-			}
+			where: {UserId: id}
 		});
-
-		const followerCount = await Follower.count({
-			where: {followsId: id}
-		});
-		const followingCount = await Following.count({
-			where: {followerId: id}
-		});
-
-		const userProfile = {nome, email, localizacao, avatar_url, bio, followerCount, followingCount};
-
-		res.status(200).json({userProfile});
+		if (aux) {
+			const followerCount = await Follower.count({
+				where: {followsId: id}
+			});
+			const followingCount = await Follower.count({
+				where: {UserId: id}
+			});
+	
+			const userProfile = {nome, email, localizacao, avatar_url, bio, followerCount, followingCount};
+	
+			return res.status(200).json({userProfile});
+		}
+		return res.status(404).json({message: `Usuario existe, mas nao segue ${me.nome}`});		
 	} catch (error) {
 		return res.status(500).json({message:`Ops, houve um erro: ${error.message}`});
 	}
@@ -94,12 +90,6 @@ const unfollow = async (req, res) => {
 			where: {
 				UserId: me.id,
 				followsId: unfollowing.id
-			}
-		});
-		await Following.destroy({
-			where: {
-				UserId: unfollowing.id,
-				followerId: me.id
 			}
 		});
 

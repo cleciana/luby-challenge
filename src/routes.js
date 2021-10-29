@@ -54,7 +54,7 @@ routes.post('/upload', upload.single('avatar'), (req, res) => {
 
 // Follow
 routes.post('/user/follow', followController.follow);
-routes.delete('/user/follow', followController.unfollow);
+routes.delete('/user/unfollow', followController.unfollow);
 routes.get('/user/followers', followController.list);
 routes.get('/user/follower/details', followController.show);
 
